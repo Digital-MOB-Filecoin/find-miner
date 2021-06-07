@@ -11,7 +11,7 @@ import (
 )
 
 type Config struct {
-	TargetURL string
+	RsvAPI string
 }
 
 type WorkerLib struct {
@@ -66,7 +66,7 @@ func (w *WorkerLib) Run() error {
 	postJson += "]}"
 
 	request := gorequest.New()
-	resp, body, errs := request.Post(w.config.TargetURL).
+	resp, body, errs := request.Post(w.config.RsvAPI).
 		Set("Content-Type", "application/json").
 		Send(postJson).
 		End()

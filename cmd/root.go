@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"path/filepath"
-	"strings"
-
+	"github.com/Digital-MOB-Filecoin/find-miner/fmtool"
 	"github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
@@ -27,58 +25,42 @@ var (
 				log.Fatal(err)
 			}
 
-			if config != "" {
-				// get the filepath
-				abs, err := filepath.Abs(config)
-				if err != nil {
-					log.Error("Error reading filepath: ", err.Error())
-				}
-
-				// get the config name
-				base := filepath.Base(abs)
-
-				// get the path
-				path := filepath.Dir(abs)
-
-				//
-				viper.SetConfigName(strings.Split(base, ".")[0])
-				viper.AddConfigPath(path)
-			}
-
-			viper.AddConfigPath(".")
-
-			// Find and read the config file; Handle errors reading the config file
-			if err := viper.ReadInConfig(); err != nil {
-				log.Info("Could not load config file. Falling back to args. Error: ", err)
-			}
-
 			initLogging()
 		},
 
 		Run: func(cmd *cobra.Command, args []string) {
 			// fall back on default help if no args/flags are passed
-			cmd.HelpFunc()(cmd, args)
+			//cmd.HelpFunc()(cmd, args)
+			size := viper.GetInt64("size")
+			region := viper.GetString("region")
+			verifiedSPL := viper.GetInt64("verified-storage-price-limit")
+			skip := viper.GetInt64("skip-miners")
+
+			x := fmtool.NewWorkerLib(
+				size,
+				region,
+				verifiedSPL,
+				skip,
+				fmtool.Config{
+					RsvAPI: viper.GetString("rsv-api"),
+				})
+
+			err := x.Run()
+			if err != nil {
+				log.Fatal(err)
+			}
 		},
 	}
 )
 
 func init() {
 	cobra.OnInitialize(func() {
-		viper.Set("version", RootCmd.Version)
+		//viper.Set("version", RootCmd.Version)
 	})
-	viper.SetEnvPrefix("fmt")
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
-	viper.AutomaticEnv()
+	RootCmd.Flags().Int64("size", 0, "Deal size")
+	RootCmd.Flags().String("region", "", "Miner's region : ap|cn|na|eu")
+	RootCmd.Flags().Int64("verified-storage-price-limit", -1, "Maximum acceptable verified storage price (in FIL)")
+	RootCmd.Flags().Int64("skip-miners", 0, "The first N miners that would normally be returned are skipped")
 
-	// persistent flags
-	RootCmd.PersistentFlags().StringVar(&config, "config", "", "/path/to/config.yml")
-
-	RootCmd.PersistentFlags().BoolVar(&verbose, "v", false, "Set all logging modules to debug (shorthand for `--logging=*=debug`)")
-	RootCmd.PersistentFlags().BoolVar(&vverbose, "vv", false, "Set all logging modules to trace (shorthand for `--logging=*=trace`)")
-
-	RootCmd.PersistentFlags().String("logging", "", "Display debug messages")
-	viper.BindPFlag("logging", RootCmd.Flag("logging"))
-
-	// local flags;
-	RootCmd.Flags().BoolVar(&version, "version", false, "Display the current version of this CLI")
+	RootCmd.PersistentFlags().String("rsv-api", "https://api.repsys.d.interplanetary.one/rpc", "RSV api")
 }
