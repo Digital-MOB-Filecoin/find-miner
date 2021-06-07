@@ -1,12 +1,12 @@
 package cmd
 
 import (
-	"fmt"
+	"strings"
+
 	formatter "github.com/lacasian/logrus-module-formatter"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"strings"
 )
 
 func initLogging() {
@@ -34,16 +34,6 @@ func initLogging() {
 	logrus.SetFormatter(f)
 
 	log.Debug("Debug mode")
-}
-
-func buildDBConnectionString() {
-	if viper.GetString("db.connection-string") == "" {
-		user := viper.GetString("db.user")
-		pass := viper.GetString("db.password")
-
-		p := fmt.Sprintf("host=%s port=%s sslmode=%s dbname=%s user=%s password=%s", viper.GetString("db.host"), viper.GetString("db.port"), viper.GetString("db.sslmode"), viper.GetString("db.dbname"), user, pass)
-		viper.Set("db.connection-string", p)
-	}
 }
 
 func mustGetSubconfig(v *viper.Viper, key string, out interface{}) {
