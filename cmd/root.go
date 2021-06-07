@@ -19,8 +19,8 @@ var (
 
 	RootCmd = &cobra.Command{
 		Use:   "find-miner",
-		Short: "not doing anything",
-		Long:  "I'm a simple boilerplate. Use me and change me. I'm your whore.",
+		Short: "find-miner CLI",
+		Long:  "The use case for find-miner is to enable a user of the Lotus CLI or API to select a miner for a given type of storage deal.",
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			err := viper.BindPFlags(cmd.Flags())
 			if err != nil {

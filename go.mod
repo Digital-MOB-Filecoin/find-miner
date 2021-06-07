@@ -1,8 +1,8 @@
-module github.com/Digital-MOB-Filecoin/find-miner/fmtool
+module github.com/Digital-MOB-Filecoin/find-miner
 
 require (
 	github.com/lacasian/logrus-module-formatter v0.0.0-20201126131010-ff27c57db003
-	github.com/parnurzeal/gorequest v0.2.16 // indirect
+	github.com/parnurzeal/gorequest v0.2.16
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.1.3

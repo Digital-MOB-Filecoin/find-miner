@@ -1,2 +1,4 @@
 # Display debug messages
 logging: ""
+# RSV api.
+rsv-api: "https://api.repsys.d.interplanetary.one/rpc"
