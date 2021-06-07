@@ -25,12 +25,9 @@ var (
 				log.Fatal(err)
 			}
 
-			initLogging()
 		},
 
 		Run: func(cmd *cobra.Command, args []string) {
-			// fall back on default help if no args/flags are passed
-			//cmd.HelpFunc()(cmd, args)
 			size := viper.GetInt64("size")
 			region := viper.GetString("region")
 			verifiedSPL := viper.GetInt64("verified-storage-price-limit")
@@ -55,7 +52,7 @@ var (
 
 func init() {
 	cobra.OnInitialize(func() {
-		//viper.Set("version", RootCmd.Version)
+		viper.Set("version", RootCmd.Version)
 	})
 	RootCmd.Flags().Int64("size", 0, "Deal size")
 	RootCmd.Flags().String("region", "", "Miner's region : ap|cn|na|eu")
