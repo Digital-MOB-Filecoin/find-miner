@@ -39,31 +39,40 @@ func (w *WorkerLib) Run() error {
 	//   --verified-retrieval-price-limit
 	//   --skip-miners=N
 
-	postJson := `{"jsonrpc": "2.0", "method": "miners.find", "id": 1, "params": [`
+	var size string
+	var region string
+	var verifiedSPL string
+	var skip string
+
 	if w.size <= 0 {
-		postJson += "null,"
+		size = "null"
 	} else {
-		postJson += strconv.FormatInt(w.size, 10)
-		postJson += ","
+		size = strconv.FormatInt(w.size, 10)
 	}
+
 	if len(w.region) == 0 {
-		postJson += "null,"
+		region = "null"
 	} else {
-		postJson += "\"" + w.region + "\""
-		postJson += ","
+		region = "\"" + w.region + "\""
 	}
+
 	if w.verifiedSPL < 0 {
-		postJson += "null,"
+		verifiedSPL = "null"
 	} else {
-		postJson += strconv.FormatInt(w.verifiedSPL, 10)
-		postJson += ","
+		verifiedSPL = strconv.FormatInt(w.verifiedSPL, 10)
 	}
+
 	if w.skip <= 0 {
-		postJson += "null"
+		skip = "null"
 	} else {
-		postJson += strconv.FormatInt(w.skip, 10)
+		skip = strconv.FormatInt(w.skip, 10)
 	}
-	postJson += "]}"
+
+	postJson := fmt.Sprintf(`{"jsonrpc": "2.0", "method": "miners.find", "id": 1, "params": [%s,%s,%s,%s]}`,
+		size,
+		region,
+		verifiedSPL,
+		skip)
 
 	request := gorequest.New()
 	resp, body, errs := request.Post(w.config.RsvAPI).
@@ -80,7 +89,10 @@ func (w *WorkerLib) Run() error {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(data["result"])
+
+	if data["result"] != nil {
+		fmt.Println(data["result"])
+	}
 
 	return nil
 }
