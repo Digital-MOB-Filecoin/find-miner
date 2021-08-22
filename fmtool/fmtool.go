@@ -15,19 +15,23 @@ type Config struct {
 }
 
 type WorkerLib struct {
-	size        int64
-	region      string
-	verifiedSPL int64
-	skip        int64
-	config      Config
+	size          int64
+	region        string
+	verifiedSPL   int64
+	skip          int64
+	verified      string
+	fastRetrieval string
+	config        Config
 }
 
-func NewWorkerLib(size int64, region string, verifiedSPL int64, skip int64, config Config) *WorkerLib {
+func NewWorkerLib(size int64, region string, verifiedSPL int64, skip int64, verified string, fastRetrieval string, config Config) *WorkerLib {
 	return &WorkerLib{
 		size,
 		region,
 		verifiedSPL,
 		skip,
+		verified,
+		fastRetrieval,
 		config,
 	}
 }
@@ -68,11 +72,13 @@ func (w *WorkerLib) Run() error {
 		skip = strconv.FormatInt(w.skip, 10)
 	}
 
-	postJson := fmt.Sprintf(`{"jsonrpc": "2.0", "method": "miners.find", "id": 1, "params": [%s,%s,%s,%s]}`,
+	postJson := fmt.Sprintf(`{"jsonrpc": "2.0", "method": "miners.find", "id": 1, "params": [%s,%s,%s,%s,%s,%s]}`,
 		size,
 		region,
 		verifiedSPL,
-		skip)
+		skip,
+		w.verified,
+		w.fastRetrieval)
 
 	request := gorequest.New()
 	resp, body, errs := request.Post(w.config.RsvAPI).

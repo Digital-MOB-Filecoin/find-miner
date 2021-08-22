@@ -32,12 +32,16 @@ var (
 			region := viper.GetString("region")
 			verifiedSPL := viper.GetInt64("verified-storage-price-limit")
 			skip := viper.GetInt64("skip-miners")
+			verified := viper.GetString("verified")
+			fastRetrieval := viper.GetString("fastRetrieval")
 
 			x := fmtool.NewWorkerLib(
 				size,
 				region,
 				verifiedSPL,
 				skip,
+				verified,
+				fastRetrieval,
 				fmtool.Config{
 					RsvAPI: viper.GetString("rsv-api"),
 				})
@@ -58,6 +62,8 @@ func init() {
 	RootCmd.Flags().String("region", "", "Miner's region : ap|cn|na|eu")
 	RootCmd.Flags().Int64("verified-storage-price-limit", -1, "Maximum acceptable verified storage price (in FIL)")
 	RootCmd.Flags().Int64("skip-miners", 0, "The first N miners that would normally be returned are skipped")
+	RootCmd.Flags().String("verified", "null", "Verified")
+	RootCmd.Flags().String("fastRetrieval", "null", "Fast Retrieval")
 
 	RootCmd.PersistentFlags().String("rsv-api", "https://api.repsys.d.interplanetary.one/rpc", "RSV api")
 }
