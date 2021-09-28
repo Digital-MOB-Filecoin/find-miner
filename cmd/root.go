@@ -65,5 +65,5 @@ func init() {
 	RootCmd.Flags().String("verified", "null", "Verified")
 	RootCmd.Flags().String("fastRetrieval", "null", "Fast Retrieval")
 
-	RootCmd.PersistentFlags().String("rsv-api", "https://api.repsys.d.interplanetary.one/rpc", "RSV api")
+	RootCmd.PersistentFlags().String("rsv-api", "http://api.filrep.io/rpc", "RSV api")
 }
