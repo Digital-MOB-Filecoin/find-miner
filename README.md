@@ -15,7 +15,7 @@ data from filrep.io filecoin reputation system.
   --h, --help                          Help for find-miner
   --fastRetrieval string               Fast Retrieval (true/false)
   --region string                      Miner's region : ap|cn|na|eu
-  --size int                           Deal size
+  --size int                           Deal size in bytes
   --skip-miners int                    The first N miners that would normally be returned are skipped
   --verified string                    Verified (true/false)
   --verified-storage-price-limit int   Maximum acceptable verified storage price (in FIL)
