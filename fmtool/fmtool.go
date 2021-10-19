@@ -47,6 +47,8 @@ func (w *WorkerLib) Run() error {
 	var region string
 	var verifiedSPL string
 	var skip string
+	var fastRetrieval string
+	var verified string
 
 	if w.size <= 0 {
 		size = "null"
@@ -66,6 +68,18 @@ func (w *WorkerLib) Run() error {
 		verifiedSPL = strconv.FormatInt(w.verifiedSPL, 10)
 	}
 
+	if len(w.fastRetrieval) == 0 {
+		fastRetrieval = "null"
+	} else {
+		fastRetrieval = w.fastRetrieval
+	}
+
+	if len(w.verified) == 0 {
+		verified = "null"
+	} else {
+		verified = w.verified
+	}
+
 	if w.skip <= 0 {
 		skip = "null"
 	} else {
@@ -77,8 +91,8 @@ func (w *WorkerLib) Run() error {
 		region,
 		verifiedSPL,
 		skip,
-		w.verified,
-		w.fastRetrieval)
+		verified,
+		fastRetrieval)
 
 	request := gorequest.New()
 	resp, body, errs := request.Post(w.config.RsvAPI).
@@ -98,6 +112,8 @@ func (w *WorkerLib) Run() error {
 
 	if data["result"] != nil {
 		fmt.Println(data["result"])
+	} else {
+		fmt.Println("No Miner Found")
 	}
 
 	return nil
