@@ -1,8 +1,7 @@
 # Find Miner CLI Tool
 
 
-The use case for find-miner is to enable a user of the Lotus CLI or API to select a miner for a given type of storage deal. Is using the 
-data from filrep.io filecoin reputation system.
+The use case for find-miner is to enable a user of the Lotus CLI or API to select a miner for a given type of storage deal. The CLI tool uses data from filrep.io Filecoin Reputation System.
 
 
 ### Usage:
